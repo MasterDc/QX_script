@@ -1,0 +1,28 @@
+# Kugou/TME (酷狗/腾讯音乐) 广告路径重写
+# QuanX 导入: 设置 > 重写 > 规则资源 > 添加
+# 必须先配好 MITM: 主配置 [mitm] 的 hostname 追加:
+#   hostname = ..., gateway.kugou.com, adservice.kugou.com, mdpfilebssdlbig.kugou.com
+
+# 启动页
+^https?://gateway\.kugou\.com/ads\.service/v2/lite_v_splash url reject-200
+# 弹窗
+^https?://gateway\.kugou\.com/ads\.gateway/v2/lite_v_popup url reject-200
+# 首页Banner
+^https?://gateway\.kugou\.com/ads\.gateway/v2/lite_v_youth_home_banner url reject-200
+# 搜索无焦点
+^https?://gateway\.kugou\.com/ads\.gateway/v2/lite_v_search_no_focus url reject-200
+# 播放器组件
+^https?://gateway\.kugou\.com/ads\.gateway/v2/lite_v_youth_player_widget url reject-200
+# VIP中心
+^https?://gateway\.kugou\.com/ads\.gateway/v2/lite_v_vip_center url reject-200
+# 曝光上报
+^https?://gateway\.kugou\.com/ads\.gateway/v3/stat_expose url reject-200
+# 通用兜底
+^https?://gateway\.kugou\.com/ads\. url reject-200
+
+# 广告按钮图片
+^https?://mdpfilebssdlbig\.kugou\.com/.*\.(png|jpg|jpeg|webp) url reject-img
+
+# 广告配置
+^https?://adservice\.kugou\.com/v2/lite_v_youth_task_center url reject-200
+^https?://adservice\.kugou\.com/v2/lite_v_youth_player_widget url reject-200
