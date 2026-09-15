@@ -33,8 +33,8 @@ csvw_data={"deviceid":"XXXXXXXX","did":"VW_APP_iPhone_xxxxxxxxxxx_17.0.0_2.7.1",
 # BARK_KEY=Bark设备key(api.day.app后面那串)
 # BARK_URL=完整Bark地址(自建服务器可填自己的,默认官方 https://api.day.app/KEY)
 # 签到完成后推送标题"上汽大众签到",内容为签到结果
-# 随机延迟 = 整个签到流程开始前随机延时(秒,默认10-600即10秒~10分钟),到点后各步骤连续执行:
-# csvw_delay=10-600   或分开设 csvw_delay_min=10 / csvw_delay_max=600
+# 随机延迟 = 整个签到流程开始前随机延时(秒,默认10-200即10秒~10分钟),到点后各步骤连续执行:
+# csvw_delay=10-200   或分开设 csvw_delay_min=10 / csvw_delay_max=200
 
 旧版2.7.1版本抓包找到 https://api.mos.csvw.com/mos/security/api/v1/app/at/actions/refresh
 deviceid -----> request-headers.deviceId
@@ -64,10 +64,10 @@ async function main() {
 // ============ 随机延迟模块 ============
 // 程序开始执行所有步骤前先随机延时,把固定点的定时签到打散到时间段内,规避风控。
 // 延迟结束后 refresh/refreshSxToken/sign/status 连续执行,不再等待。
-// 配置(环境变量,不配则默认 10~600 秒即 10秒~10分钟):
-//   csvw_delay=10-600        指定范围(秒),可小数
+// 配置(环境变量,不配则默认 10~200 秒即 10秒~10分钟):
+//   csvw_delay=10-200        指定范围(秒),可小数
 //   csvw_delay_min=10        或分开设下限
-//   csvw_delay_max=600       分开设上限
+//   csvw_delay_max=200       分开设上限
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -79,12 +79,12 @@ function getDelayRange() {
         let min = parseFloat(m[1]);
         let max = parseFloat(m[2]);
         if (isNaN(min) || min < 0) min = 10;
-        if (isNaN(max) || max < min) max = 600;
+        if (isNaN(max) || max < min) max = 200;
         return [min, max];
     }
     const min = parseFloat(getEnv('csvw_delay_min') || '10');
-    const max = parseFloat(getEnv('csvw_delay_max') || '600');
-    return [isNaN(min) || min < 0 ? 10 : min, isNaN(max) || max < min ? 600 : max];
+    const max = parseFloat(getEnv('csvw_delay_max') || '200');
+    return [isNaN(min) || min < 0 ? 10 : min, isNaN(max) || max < min ? 200 : max];
 }
 
 async function randomDelay(tag) {
